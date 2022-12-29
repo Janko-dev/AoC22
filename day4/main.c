@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 int main(void){
 
@@ -11,31 +10,21 @@ int main(void){
     
     while (fgets(buf, sizeof(buf), f) != NULL){
 
-        char* ptr = buf;
+        int p1_low, p1_high, p2_low, p2_high;
+        sscanf(buf, "%d-%d,%d-%d", 
+            &p1_low, &p1_high,
+            &p2_low, &p2_high);
 
-        int p1_low = strtol(ptr, &ptr, 10);     // number
-        ptr++;                                  // -
-        int p1_high = strtol(ptr, &ptr, 10);    // number
-        ptr++;                                  // ,
-        int p2_low = strtol(ptr, &ptr, 10);     // number
-        ptr++;                                  // -
-        int p2_high = strtol(ptr, &ptr, 10);    // number
-
+        total_part1 += (p1_low >= p2_low && p1_high <= p2_high) || 
+                       (p2_low >= p1_low && p2_high <= p1_high);
         
-        if (p1_low >= p2_low && p1_high <= p2_high) {
-            total_part1++;
-        } else if (p2_low >= p1_low && p2_high <= p1_high){
-            total_part1++;
-        }
-
-        if ((p1_low >= p2_low  && p1_low <= p2_high) ||
-            (p1_high >= p2_low && p1_high <= p2_high)) {
-            total_part2++;
-        } else 
-        if ((p2_low >= p1_low  && p2_low <= p1_high) ||
-            (p2_high >= p1_low && p2_high <= p1_high)){
-            total_part2++;
-        }
+        // total_part2 += ((p1_low >= p2_low  && p1_low <= p2_high)   ||
+        //                 (p1_high >= p2_low && p1_high <= p2_high)) ||
+        //                ((p2_low >= p1_low  && p2_low <= p1_high)   ||
+        //                 (p2_high >= p1_low && p2_high <= p1_high));
+        
+        total_part2 += (p1_low <= p2_low && p1_high >= p2_low) || 
+                       (!(p1_low <= p2_low)  && p2_high >= p1_low);
     }
     fclose(f);
     
